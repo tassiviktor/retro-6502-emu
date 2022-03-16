@@ -578,7 +578,79 @@ public abstract class Cpu65xxCore implements Component {
         setPc((hi << 8) + lo + 1);
     }
 
+    public void sbc(){
+        int tmp;
+        int data = getOperand();
 
+        if (flags.decimal) {
+            tmp = 10 * (regA & 0xf0) + (regA & 0x0f) - (10 * (data & 0xf0) + (data & 0x0f));
+            tmp = ((tmp / 10) << 4) + tmp % 10;
+        } else {
+            tmp = regA - data - (flags.carry ? 0 : 1);
+        }
 
+        flags.overflow = (((regA ^ tmp) & 0x80) != 0) && (((regA ^ data) & 0x80) != 0);
+        flags.carry = tmp >= 0;
+        regA = tmp & 0xff;
+        flags.zero = regA == 0;
+        flags.negative = regA >= 0x80;
+    }
 
+    public void sec(){
+        flags.carry = true;
+    }
+
+    public void sed(){
+        flags.decimal = true;
+    }
+
+    public void sei(){
+        flags.intDisabled = true;
+    }
+
+    public void sta(){
+        writeByteToAddress(readWordFromAddress(incrementPcAndGetOld(2)), regA);
+    }
+
+    public void stx(){
+        writeByteToAddress(readWordFromAddress(incrementPcAndGetOld(2)), regX);
+    }
+
+    public void sty(){
+        writeByteToAddress(readWordFromAddress(incrementPcAndGetOld(2)), regY);
+    }
+
+    public void tax(){
+        regX = regA;
+        flags.zero = regX == 0;
+        flags.negative = regX >= 0x80;
+    }
+
+    public void tay(){
+        regY = regA;
+        flags.zero = regY == 0;
+        flags.negative = regY >= 0x80;
+    }
+
+    public void tsx(){
+        regX = sp & 0xFF;
+        flags.zero = regX == 0;
+        flags.negative = regX >= 0x80;
+    }
+
+    public void txa(){
+        regA = regX;
+        flags.zero = regA == 0;
+        flags.negative = regA >= 0x80;
+    }
+
+    public void txs(){
+        sp = regX;
+    }
+
+    public void tya(){
+        regA = regY;
+        flags.zero = regA == 0;
+        flags.negative = regA >= 0x80;
+    }
 }

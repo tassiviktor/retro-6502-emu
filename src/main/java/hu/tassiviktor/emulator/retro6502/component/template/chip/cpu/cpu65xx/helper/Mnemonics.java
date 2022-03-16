@@ -46,10 +46,26 @@ public enum Mnemonics {
     PLP,
     ROL,
     ROR,
-
-
     RTI,
     RTS,
+
+    SBC,
+
+    SEC,
+    SED,
+    SEI,
+
+    STA,
+    STX,
+    STY,
+
+    TAX,
+    TAY,
+
+    TSX,
+    TXA,
+    TXS,
+    TYA,
 
     XXX //Unimplemented feature
 }

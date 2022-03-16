@@ -786,8 +786,156 @@ public class InstructionTableBuilder {
          */
         iTable[0x60] = new Instruction((byte) 0x00, RTS, Addressing.Mode.IMM,1,6,false,cpu::rts);
 
+        /*  SBC - Subtract Memory from Accumulator with Borrow
 
+            A - M - C' -> A
 
+            Affected flags:
+            N	Z	C	I	D	V
+            +	+	+	-	-	+
+
+            addressing	    assembler	    opc	bytes	cycles
+            --------------------------------------------------
+            immediate	    SBC #oper	    E9	2	    2
+            zeropage	    SBC oper	    E5	2	    3
+            zeropage,X	    SBC oper,X	    F5	2	    4
+            absolute	    SBC oper	    ED	3	    4
+            absolute,X	    SBC oper,X	    FD	3	    4*
+            absolute,Y	    SBC oper,Y	    F9	3	    4*
+            (indirect,X)	SBC (oper,X)	E1	2	    6
+            (indirect),Y	SBC (oper),Y	F1	2	    5*
+        */
+        iTable[0xE9] = new Instruction((byte) 0xE9, SBC, Addressing.Mode.IMM,2,2,false, cpu::sbc);
+        iTable[0xE5] = new Instruction((byte) 0xE5, SBC, Addressing.Mode.ZRP,2,3,false, cpu::sbc);
+        iTable[0xF5] = new Instruction((byte) 0xF5, SBC, Addressing.Mode.ZPX,2,4,false, cpu::sbc);
+        iTable[0xED] = new Instruction((byte) 0xED, SBC, Addressing.Mode.ABS,3,4,false, cpu::sbc);
+        iTable[0xFD] = new Instruction((byte) 0xFD, SBC, Addressing.Mode.ABX,3,4,true, cpu::sbc);
+        iTable[0xF9] = new Instruction((byte) 0xF9, SBC, Addressing.Mode.ABY,3,4,true, cpu::sbc);
+        iTable[0xE1] = new Instruction((byte) 0xE1, SBC, Addressing.Mode.INX,2,6,false, cpu::sbc);
+        iTable[0xF1] = new Instruction((byte) 0xF1, SBC, Addressing.Mode.INY,2,5,true, cpu::sbc);
+
+        /*  SEC - Set Carry Flag
+            1 -> C
+
+            Affected flags:
+            N	Z	C	I	D	V
+            -	-	1	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    SEC	        38	1	    2
+         */
+        iTable[0x38] = new Instruction((byte) 0x38, SEC, Addressing.Mode.IMP,1,2,false, cpu::sec);
+
+        /*  SED - Set Decimal Flag
+            1 -> D
+
+            Affected flags:
+            N	Z	C	I	D	V
+            -	-	-	-	1	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    SED	        F8	1	    2
+         */
+        iTable[0xF8] = new Instruction((byte) 0xF8, SED, Addressing.Mode.IMP,1,2,false, cpu::sed);
+
+         /*  SEI - Set Interrupt Disable Flag
+            1 -> I
+
+            Affected flags:
+            N	Z	C	I	D	V
+            -	-	-	1	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    SEI	        78	1	    2
+        */
+        iTable[0x78] = new Instruction((byte) 0x78, SEI, Addressing.Mode.IMP,1,2,false, cpu::sei);
+
+        /*  TAX - Transfer Accumulator to Index X
+            A -> X
+
+            Affected flags:
+
+            N	Z	C	I	D	V
+            +	+	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TAX	        AA	1	    2
+        */
+        iTable[0xAA] = new Instruction((byte) 0xAA, TAX, Addressing.Mode.IMP,1,2,false, cpu::tax);
+
+        /* TAY - Transfer Accumulator to Index Y
+            A -> Y
+
+            Affected flags:
+
+            N	Z	C	I	D	V
+            +	+	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TAY	        A8	1	    2
+
+        */
+        iTable[0xA8] = new Instruction((byte) 0xA8, TAY, Addressing.Mode.IMP,1,2,false, cpu::tay);
+
+        /*  TSX - Transfer Stack Pointer to Index X
+            SP -> X
+
+            Affected flags:
+            N	Z	C	I	D	V
+            +	+	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TSX	        BA	1	    2
+
+        */
+        iTable[0xBA] = new Instruction((byte) 0xBA, TSX, Addressing.Mode.IMP,1,2,false, cpu::tsx);
+
+        /*  TXA - Transfer Index X to Accumulator
+            X -> A
+
+            Affected flags:
+            N	Z	C	I	D	V
+            +	+	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TXA	        8A	1	    2
+
+        */
+        iTable[0x8A] = new Instruction((byte) 0x8A, TXA, Addressing.Mode.IMP,1,2,false, cpu::txa);
+
+        /*  TXS - Transfer Index X to Stack Register
+            X -> SP
+
+            Affected flags:
+            N	Z	C	I	D	V
+            -	-	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TXS	        9A	1	    2
+
+         */
+        iTable[0x9A] = new Instruction((byte) 0x9A, TXS, Addressing.Mode.IMP,1,2,false, cpu::txs);
+
+        /*  TYA - Transfer Index Y to Accumulator
+            Y -> A
+
+            Affected flags:
+            N	Z	C	I	D	V
+            +	+	-	-	-	-
+
+            addressing	assembler	opc	bytes	cycles
+            ------------------------------------------
+            implied	    TYA	        98	1	    2
+        */
+        iTable[0x98] = new Instruction((byte) 0x98, TYA, Addressing.Mode.IMP,1,2,false, cpu::tya);
     }
 
     private static void initTable(Instruction[] iTable, Cpu65xxCore cpu){
