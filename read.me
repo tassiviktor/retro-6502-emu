@@ -1,0 +1,65 @@
+$0000 - $0FFF | 4k RAM - Zeropage, vector, etc.
+====================================================
+              |  $0000 - $0001 - Chip selector lines
+              |  $0100 - $01FF - Stack
+              |
+              |  $0400 - $0FFF - 3k Unused ?
+
+$1000 - $1FFF |
+$2000 - $2FFF |
+$3000 - $3FFF |
+$4000 - $4FFF |
+$5000 - $5FFF |
+$6000 - $6FFF |
+$7000 - $7FFF |
+=====================================================
+              | 28 k user RAM
+
+$8000 - $8FFF | 8k Video RAM
+$9000 - $9FFF |
+=====================================================
+              | (320*200 b/w, 160x200 * 4 color. color palette is defined in video registers 4 color is selectable from 16 color palette)
+
+$A000 - $AFFF | 4k Text & sprite RAM
+=====================================================
+              |
+              | $A000 - $A399 | 1k | 40*25 text screen 1000 bytes in text mode
+              |                    | 16 sprite: 24*21 in bw 16*21 in color mode. color palettes in video regs. can be different than bg palette.
+              |                    |    0th is mouse cursor shape if enabled in hi-res mode
+              |
+              | $A400 - $A799 | 1k | 40*25 char properties
+              |                    | bits are:
+              |                    | 0 - color #0  | from 16 color palette.
+              |                    | 1 - color #1  |
+              |                    | 2 - color #2  |
+              |                    | 3 - color #3  |
+              |                    | 4 - invert
+              |                    | 5 - blink
+              |                    | 6 - underline
+              |                    | 7 - strike
+              |
+              | $A800 - $ABFF | 1k | unused
+              | $AC00 - $AFFF | 1k | unused
+
+
+$B000 - $BFFF | RAM / CHAR ROM / IO
+====================================================
+              | $B000 - $B799 - 2k Char ROM
+              |
+              | $B800 - $BFFF 2k IO space.
+              | IO:
+              |     $B800 - $B8FF | SER IO adapter #1
+              |     $B900 - $B9FF | SER IO adapter #2
+              |     $BA00 - $BAFF | PAR IO adapter #1
+              |     $BB00 - $BBFF | PAR IO adapter #2
+              |     $BC00 - $BCFF | INT controller
+
+$C000 - $CFFF |
+$D000 - $DFFF |
+====================================================
+              | DOS / Expansion ROM
+
+$E000 - $EFFF |
+$F000 - $FFFF |
+====================================================
+              | Kernal / Expansion ROM
